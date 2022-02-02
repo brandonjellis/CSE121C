@@ -8,9 +8,7 @@ CSE121C Week 4 Assignment
 #include <stdio.h>
 #include <stdlib.h>
 
-//define variables for task 1
-int aNum = 0;
-int bNum = 0;
+
 
 //define structure for task 2
 struct account{
@@ -20,17 +18,24 @@ struct account{
 };
 
 //Initialize functions
-void minimums(int* a, int* b);
+int minimums(int* a, int* b);
 void writeAccount(struct account*);
 void readAccount(struct account*);
 
 
 
-void main(){
+int main(void){
+    
     //task 1
-    int* aPoint = &aNum;
-    int* bPoint = &bNum;
-    minimums(aPoint, bPoint);
+    //define variables for task 1
+    int aNum = 0;
+    int bNum = 0;
+
+    printf("A = %d, B = %d\n",aNum,bNum);
+    
+    printf("Minimum Value is: %d\n",minimums(&aNum, &bNum));
+
+    printf("A = %d, B = %d\n",aNum,bNum);
 
     //task 2
     //create instance of an account after allocating memory space
@@ -40,24 +45,23 @@ void main(){
     readAccount(acct);
 
     free(acct);
-
+    return 0;
 }
 
 
 //TASK 1: MINIMUM NUMBERS
-void minimums(int* a, int* b){
-    printf("A = %d, B = %d\n",*a,*b);
+int minimums(int* a, int* b){
+
     printf("Enter a number for A:");
     scanf("%d",a);
     printf("Enter a number for B:");
     scanf("%d",b);
     if(*a >= *b){
-        printf("Minimum is %d\n",*b);
+        return *b;
     }
     else{
-        printf("Minimum is %d\n",*a);
+        return *a;
     }
-    printf("A = %d, B = %d\n",*a,*b);
 }
 
 
@@ -70,9 +74,10 @@ void writeAccount(struct account* a){
     scanf("%s", a->name);
     printf("What is the account balance?: ");
     scanf("%f", &a->balance);
+    printf("\n");
 }
 
 void readAccount(struct account* a){
-    printf("\nAccount information:\n");
-    printf("# %d\nNAME: %s\nBALANCE: $%.2f",a->number, a->name, a->balance);
+    printf("Account information:\n");
+    printf("# %d\nNAME: %s\nBALANCE: $%.2f\n",a->number, a->name, a->balance);
 }
