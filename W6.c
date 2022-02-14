@@ -24,7 +24,7 @@ struct acct* next;
 };
 
 void createAccount(struct acct** first, struct acct** newest);
-void checkBook(struct acct* acct);
+void checkBook(struct acct** acct);
 void writeAccount(struct acct* a);
 void writeBook(struct book* b);
 void printAccount(struct acct* a);
@@ -33,7 +33,6 @@ void showAccount(struct acct* acct);
 struct acct* findAccount(struct acct* first);
 struct book* newestBook(struct book* first);
 struct acct* newestAcct(struct acct* first);
-void deleteAcct(struct acct* first);
 void listAccounts(struct acct* list);
 
 int main(){
@@ -41,20 +40,17 @@ int main(){
     struct acct* firstAcct = NULL; 
     struct acct* selAcct = NULL;
     struct acct* newestAcct = NULL;
-    short loop = 1;
-    short userChoice = 0;
+    int loop = 1;
+    int userChoice = 0;
 
     printf("Library Management System V1.0:\n");
     while(loop == 1){
         printf("MAIN MENU:\n");
-        printf("[1] CREATE ACCOUNT\n[2] EDIT ACCOUNT\n[3] DELETE ACCOUNT\n[4] LOOKUP ACCOUNT\n[5] CHECKOUT BOOK\n[6] RETURN BOOK\n[7] LIST ACCOUNTS\n\n[0] EXIT PROGRAM\n\n");
+        printf("[1] CREATE ACCOUNT\n[2] EDIT ACCOUNT\n[3] LOOKUP ACCOUNT\n[4] CHECKOUT BOOK\n[5] LIST ACCOUNTS\n\n[0] EXIT PROGRAM\n\n");
         scanf("%d",&userChoice);
-
         switch (userChoice){
             case 1:
-            printf("newest: %p\nnewestADD: %p\n",newestAcct,&newestAcct);
             createAccount(&firstAcct, &newestAcct);
-            printf("newest: %p\nnewestNext: %p\nfirst: %p\nfirstNext: %p\n",newestAcct,newestAcct->next,firstAcct,firstAcct->next);
             break;
 
             case 2:
@@ -66,26 +62,20 @@ int main(){
             break;
 
             case 3:
-            break;
-
-            case 4:
             selAcct = findAccount(firstAcct);
             if(selAcct != NULL){
                 showAccount(selAcct);
             }
             break;
 
-            case 5:
+            case 4:
             selAcct = findAccount(firstAcct);
             if(selAcct != NULL){
-                checkBook(selAcct);
+                checkBook(&selAcct);
             }
             break;
 
-            case 6:
-            break;
-
-            case 7:
+            case 5:
             listAccounts(firstAcct);
             break;
 
@@ -116,24 +106,24 @@ void createAccount(struct acct** first, struct acct** recent){
         *recent = new;
     }
     else{
-        printf("recent: %p\n*recent %p\n",recent,*recent);
-        (*recent)->next = new;
+        ((*recent)->next) = new;
         *recent = new;
     }
     printf("Account Created!\n");
 }
 
-void checkBook(struct acct* acct){
-    struct book* newBook = malloc(sizeof(struct book));
+void checkBook(struct acct** acct){
+    struct book* newBook = NULL;
+    newBook = malloc(sizeof(struct book));
     newBook->next = NULL;
     writeBook(newBook);
-    if (acct->booklist == NULL){
-        acct->booklist = newBook;
-        acct->bookend = newBook;
+    if ((*acct)->booklist == NULL){
+        (*acct)->booklist = newBook;
+        (*acct)->bookend = newBook;
     }
     else{
-        acct->bookend->next = newBook;
-        acct->bookend = newBook;
+        (*acct)->bookend->next = newBook;
+        (*acct)->bookend = newBook;
     }
 }
 
@@ -157,8 +147,7 @@ void writeBook(struct book* b){
 }
 
 void printAccount(struct acct* a){
-    printf("#%d NAME: %s\n",a->acctNum, a->name);
-    printf("%x\n",a->next);
+    printf("#%d NAME: %s\n",a->acctNum, a->name); 
 }
 
 void printBook(struct book* b){
@@ -208,8 +197,4 @@ struct acct* findAccount(struct acct* first){
     }
     printf("Account not found!\n");
     return NULL;
-}
-
-void deleteAcct(struct acct* first){
-
 }
